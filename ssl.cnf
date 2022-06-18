@@ -1,0 +1,3 @@
+#[root@cdhcmtest01 ~]# cat SSL/day2/ssl.cnf
+[ v3_req ]
+extendedKeyUsage = clientAuth,serverAuth
