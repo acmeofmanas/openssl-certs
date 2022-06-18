@@ -1,0 +1,1 @@
+openssl x509  -req -days 3650 -in /opt/cloudera/security/pki/cdhcmtest01.analytics.smvgroup.com.csr -CA rootCACert.pem -CAkey rootCAKey.pem -CAcreateserial -out cdhcmtest01.analytics.smvgroup.com.pem  -extfile ./ssl.cnf  -extensions v3_req
