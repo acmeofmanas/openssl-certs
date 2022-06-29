@@ -1,0 +1,12 @@
+SSL Certificates have a key pair: a public and a private key. These keys work together to establish an encrypted connection. They are not interchangeable with other keys, thus it can be important to verify an existing public server certificate and a private key are a pair before attempting to use them for encrypting communication.
+
+Follow the steps below in a terminal window to verify a public and private key are a pair:
+
+openssl x509 -noout -modulus -in <public.crt> | openssl md5 > /tmp/crt.pub
+Note: Replace <public.crt> with the filename of the public certificate.
+
+openssl rsa -noout -modulus -in <private.key> | openssl md5 > /tmp/key.pub
+Note: Replace <private.key> with the filename of the private key. Enter the password if prompted.
+
+diff /tmp/crt.pub /tmp/key.pub
+Note: If nothing is printed to the console, they were found to be a pair. Any differences are printed to the console in detail.
