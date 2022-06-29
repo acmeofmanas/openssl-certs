@@ -1,0 +1,21 @@
+# step to create RootCA 
+$ then signed CSR using the RootCA
+#last import cert and key into keystore
+
+cat 01-rootCA.sh 02-new-cert-usingCA.sh 
+openssl genrsa -out rootca.key 2048 -keyalg rsa
+
+openssl req -new -nodes -key rootca.key -x509 -days 3650 -out rootca.pem -subj "/C=US/ST=IL/L=Chicago/O=smvgroup/OU=analyticss/CN=rootca-starcomm"
+
+
+#cat 02-new-cert-usingCA.sh
+openssl genrsa -out $(hostname -s).key 2048
+
+openssl req -new -sha256 -key $(hostname -s).key -subj "/C=US/ST=IL/L=Chicago/O=smvgroup/OU=analyticss/CN=cdhcmtest07.analytics.smvgroup.com.pem" -out $(hostname).csr
+
+openssl x509 -req -in $(hostname).csr -CA rootca.pem -CAkey rootca.key -CAcreateserial -out $(hostname).pem -days 3650 -sha256
+
+#cat 03-import.sh
+openssl pkcs12 -export -in cdhcmtest07.analytics.smvgroup.com.pem -inkey cdhcmtest07.key -out server.12 -name sample -CAfile rootca.pem -caname root
+
+keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore server.keystore -srckeystore server.12 -srcstoretype PKCS12 -srcstorepass manas -alias sample
